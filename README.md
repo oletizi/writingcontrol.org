@@ -23,4 +23,7 @@ This site uses [deskwork](https://github.com/audiocontrol-org/deskwork) for edit
 
 ### License
 
-Site code: MIT. Essays and project content: all rights reserved.
+- Site code — [MIT](./LICENSE)
+- Essays, project pages, and scrapbook content — [CC BY-NC-ND 4.0](./LICENSE-CONTENT.md)
+
+© 2026 Orion Letizi.
