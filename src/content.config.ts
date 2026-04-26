@@ -12,7 +12,10 @@ import { glob } from 'astro/loaders';
  */
 const essays = defineCollection({
   loader: glob({
-    pattern: '**/index.md',
+    // One-level deep: only `essays/<slug>/index.md` becomes a route.
+    // Anything nested deeper (scrapbooks, sub-notes) stays out of the
+    // public collection.
+    pattern: '*/index.md',
     base: './src/content/essays',
     generateId: ({ entry }) => entry.replace(/\/index\.md$/, ''),
   }),
@@ -45,7 +48,11 @@ const essays = defineCollection({
  */
 const projects = defineCollection({
   loader: glob({
-    pattern: '**/index.md',
+    // One-level deep: only `projects/<slug>/index.md` becomes a route.
+    // Sub-directories under a project (characters/, settings/,
+    // structure/, etc.) and their `scrapbook/` folders are
+    // organizational-only and never become public routes.
+    pattern: '*/index.md',
     base: './src/content/projects',
     generateId: ({ entry }) => entry.replace(/\/index\.md$/, ''),
   }),

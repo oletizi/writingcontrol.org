@@ -99,6 +99,31 @@ Sister repos (sharing aesthetic vocabulary but no code):
 - `~/work/audiocontrol.org/` — audiocontrol.org + editorialcontrol.org dual-site Astro monorepo
 - `~/work/deskwork-work/deskwork-plugin/` — the plugin this repo dogfoods
 
+## Scrapbooks
+
+Working notes for projects (and, rarely, essays) live as nested directories alongside the entry's `index.md`. The directory tree is the organizational hierarchy — there is no `nodes/` ceremony.
+
+```
+src/content/projects/<slug>/
+├── index.md                    ← the public project page
+├── scrapbook/                  ← project-level scratch
+│   └── *.md
+└── <organizational-node>/      ← e.g. characters/, settings/, structure/
+    ├── README.md               ← what this node holds
+    ├── scrapbook/              ← node-level scratch
+    └── <sub-node>/             ← arbitrary depth
+        ├── README.md
+        └── scrapbook/
+```
+
+Conventions:
+
+- The project's `index.md` is the only file in the public content collection (glob is `*/index.md`). Everything nested is dev/working material — never published.
+- Each organizational sub-node gets a `README.md` describing what it holds.
+- Scrapbook items are plain markdown with descriptive slugs. No frontmatter required.
+- Same convention is available for essays (rare): `src/content/essays/<slug>/scrapbook/`.
+- A future deskwork plugin will likely browse these via a web UI; for now the filesystem is the UI.
+
 ## Conventions
 
 - Use `@/` for internal imports (configured via `tsconfig.json` paths and Astro's auto-resolution).
