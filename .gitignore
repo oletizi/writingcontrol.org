@@ -35,3 +35,6 @@ pnpm-debug.log*
 # local-only artifacts
 .playwright-mcp/
 *.png
+
+# Claude Code per-machine settings
+.claude/settings.local.json
