@@ -1,0 +1,162 @@
+/*
+ * Prose styles — writingcontrol.org
+ *
+ * Applied to .prose containers (essay body, project body). Tuned for
+ * long-form literary reading: a single ~36rem column, generous leading,
+ * old-style figures, restrained ornamentation.
+ */
+
+.prose {
+  max-width: var(--measure-reading);
+  margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: hsl(var(--ink));
+  font-variation-settings: "opsz" 18;
+  hyphens: auto;
+  hanging-punctuation: first last;
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-heading);
+  margin-top: 2.5em;
+  margin-bottom: 0.6em;
+  hyphens: manual;
+}
+
+.prose h2 {
+  font-size: 1.65rem;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+  font-variation-settings: "opsz" 36;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.prose p {
+  margin: 0;
+}
+
+/* First paragraph after a heading — no top margin, since the heading
+ * already gave us breathing room. */
+.prose h2 + p,
+.prose h3 + p {
+  margin-top: 0.4em;
+}
+
+.prose blockquote {
+  margin: 1.6em 0 1.6em -0.5em;
+  padding: 0.2em 0 0.2em 1.25em;
+  border-left: 2px solid hsl(var(--accent));
+  font-style: italic;
+  color: hsl(var(--ink-soft));
+}
+
+.prose blockquote p:first-of-type::before {
+  content: '“';
+  margin-left: -0.4em;
+}
+
+.prose blockquote p:last-of-type::after {
+  content: '”';
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+  margin: 1em 0;
+}
+
+.prose li {
+  margin: 0.4em 0;
+}
+
+.prose li::marker {
+  color: hsl(var(--accent));
+}
+
+.prose hr {
+  border: 0;
+  text-align: center;
+  margin: 2.5em 0;
+}
+
+.prose hr::before {
+  content: '§';
+  color: hsl(var(--accent));
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0;
+}
+
+.prose code {
+  background: hsl(var(--paper-2));
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+  font-size: 0.88em;
+}
+
+.prose pre {
+  background: hsl(var(--paper-2));
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  border-left: 2px solid hsl(var(--rule));
+  margin: 1.4em 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.prose pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.prose figure.blog-figure {
+  margin: 2em 0;
+}
+
+.prose .blog-figure img {
+  width: 100%;
+  border: 1px solid hsl(var(--rule));
+}
+
+.prose .blog-figcaption {
+  margin-top: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: hsl(var(--ink-soft));
+  text-align: center;
+}
+
+.prose a {
+  color: hsl(var(--ink));
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: hsl(var(--accent) / 0.4);
+  text-underline-offset: 0.18em;
+}
+
+.prose a:hover {
+  color: hsl(var(--accent));
+  text-decoration-color: hsl(var(--accent));
+}
+
+.prose strong {
+  font-weight: 600;
+  color: hsl(var(--ink));
+}
+
+.prose em {
+  font-style: italic;
+}

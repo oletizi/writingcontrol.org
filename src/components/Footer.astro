@@ -1,0 +1,120 @@
+---
+import { brand } from '@/brand';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="colophon">
+  <hr class="colophon-rule" aria-hidden="true" />
+  <div class="colophon-inner site-container">
+    <div class="colophon-col">
+      <p class="colophon-mark">
+        <span class="folio folio--accent">w/c</span>
+        <span>{brand.name}</span>
+      </p>
+      <p class="colophon-tagline">{brand.tagline}</p>
+    </div>
+
+    <nav class="colophon-col" aria-label="Footer">
+      <p class="folio">Sections</p>
+      <ul>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/essays">Essays</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/colophon">Colophon</a></li>
+      </ul>
+    </nav>
+
+    <div class="colophon-col">
+      <p class="folio">Family</p>
+      <ul>
+        <li><a href="https://audiocontrol.org" rel="me noopener">audiocontrol.org</a></li>
+        <li><a href="https://editorialcontrol.org" rel="me noopener">editorialcontrol.org</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="colophon-baseline site-container">
+    <p>
+      <span class="folio">© {year} {brand.author}</span>
+    </p>
+    <p>
+      <span class="folio">Set in Newsreader &amp; Source Serif 4</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .colophon {
+    margin-top: 5rem;
+    padding-bottom: 2rem;
+    background: hsl(var(--paper));
+  }
+
+  .colophon-rule {
+    border: 0;
+    border-top: 1px solid hsl(var(--rule));
+    border-bottom: 1px solid hsl(var(--rule));
+    height: 4px;
+    margin: 0;
+  }
+
+  .colophon-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .colophon-col p:first-child {
+    margin: 0 0 0.75rem;
+  }
+
+  .colophon-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .colophon-tagline {
+    font-family: var(--font-body);
+    font-style: italic;
+    color: hsl(var(--ink-soft));
+    margin: 0;
+    max-width: 22rem;
+  }
+
+  .colophon-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .colophon-col li {
+    margin: 0.4rem 0;
+    font-size: 0.95rem;
+  }
+
+  .colophon-baseline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .colophon-baseline p {
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .colophon-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

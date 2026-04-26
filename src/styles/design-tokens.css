@@ -1,0 +1,187 @@
+/*
+ * Design Tokens — writingcontrol.org
+ *
+ * Mirror of src/brand.ts. See that file for the rationale. Aesthetic:
+ * literary daylight. Warm cream paper, deep brown-black ink, oxblood
+ * accent reserved for marks and dropcaps. Newsreader for display,
+ * Source Serif 4 for body, JetBrains Mono for editorial meta.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Layout */
+  --container-max-width: 1200px;
+  --container-padding: 2rem;
+  --measure-reading: 36rem; /* Long-form prose measure. */
+  --measure-narrow: 28rem;  /* Pull quotes, masthead lockup. */
+
+  /* Paper / ink */
+  --paper:    36 38% 92%;
+  --paper-2:  36 30% 88%;
+  --ink:      24 25% 13%;
+  --ink-soft: 24 18% 30%;
+  --rule:     24 18% 70%;
+
+  /* Accents */
+  --accent:   8 50% 32%;     /* Oxblood — marks, dropcaps, link hovers */
+  --mark:     45 70% 60%;    /* Highlighter — sparse marginalia tint */
+
+  /* Rule weights */
+  --rule-hairline: 1px;
+  --rule-medium: 2px;
+  --rule-heavy: 3px;
+
+  /* Typography */
+  --font-display: "Newsreader Variable", "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body:    "Source Serif 4 Variable", "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono:    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-heading: var(--font-display);
+
+  /* Optical sizing — Newsreader's variable axis */
+  --opsz-display: 144;
+  --opsz-body:    18;
+}
+
+/* --- Container --------------------------------------------------------- */
+
+.site-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+/* --- Rules ------------------------------------------------------------- */
+
+.rule-hairline {
+  border: 0;
+  border-top: var(--rule-hairline) solid hsl(var(--rule));
+  margin: 1.5rem 0;
+}
+
+.rule-double {
+  border: 0;
+  border-top: var(--rule-hairline) solid hsl(var(--rule));
+  border-bottom: var(--rule-hairline) solid hsl(var(--rule));
+  height: 4px;
+  margin: 2rem 0;
+}
+
+/* Short oxblood rule — the signature accent mark. */
+.rule-accent {
+  border: 0;
+  border-top: var(--rule-medium) solid hsl(var(--accent));
+  width: 2.5rem;
+  margin: 1.25rem 0;
+}
+
+/* Pilcrow rule — small ornament for section breaks within prose. */
+.rule-pilcrow {
+  border: 0;
+  margin: 2.5rem 0;
+  text-align: center;
+  color: hsl(var(--ink-soft));
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.5em;
+}
+
+.rule-pilcrow::before {
+  content: "§ § §";
+}
+
+/* --- Folio: a page-number-style label ---------------------------------- */
+
+/* Mono, small, all-caps — used for section labels, eyebrows, status
+ * strips, and any time we want the editorial-spine voice to show. */
+.folio {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(var(--ink-soft));
+}
+
+.folio--accent {
+  color: hsl(var(--accent));
+}
+
+/* --- Section number marginalia ----------------------------------------- */
+
+/* The §1 / §2 / §3 marks that prefix project entries on the homepage. */
+.section-numeral {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(var(--accent));
+  letter-spacing: 0;
+}
+
+/* --- Status pill (deskwork state) -------------------------------------- */
+
+/* Tiny mono label for project status — drafting / revising / paused /
+ * complete. Reads as a card-catalog stamp. */
+.status-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: hsl(var(--ink-soft));
+  border: 1px solid hsl(var(--rule));
+  padding: 0.15rem 0.5rem;
+  vertical-align: middle;
+}
+
+.status-pill--drafting   { color: hsl(var(--accent));  border-color: hsl(var(--accent) / 0.5); }
+.status-pill--revising   { color: hsl(var(--ink));     border-color: hsl(var(--ink-soft) / 0.5); }
+.status-pill--paused     { color: hsl(var(--ink-soft)); }
+.status-pill--complete   { color: hsl(var(--ink));     background: hsl(var(--paper-2)); }
+
+/* --- Dropcap ----------------------------------------------------------- */
+
+/* Used on the first paragraph of an essay. The accent color and
+ * Newsreader's display optical size do the work. */
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 4.4rem;
+  line-height: 0.85;
+  float: left;
+  margin: 0.4rem 0.5rem 0 0;
+  color: hsl(var(--accent));
+  font-feature-settings: "lnum";
+}
+
+/* --- Paper grain — extremely faint warm noise -------------------------- */
+
+/* Adds the impression of pulp without becoming kitsch. Optional: apply
+ * .paper-grain to <body> in BaseLayout when warranted. */
+.paper-grain {
+  position: relative;
+}
+
+.paper-grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.04;
+  background-image: radial-gradient(circle at 1px 1px, hsl(24 30% 30%) 0.5px, transparent 0);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+}
+
+/* --- Reduced motion ---------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

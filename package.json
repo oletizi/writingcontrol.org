@@ -1,0 +1,26 @@
+{
+  "name": "writingcontrol.org",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Notes from a writing life under construction. A literary site for fiction and literary-nonfiction projects, built to dogfood the deskwork editorial plugin.",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^6.6.4",
+    "@astrojs/sitemap": "^3.7.0",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/newsreader": "^5.2.10",
+    "@fontsource-variable/source-serif-4": "^5.2.9",
+    "astro": "^5.16.15"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "typescript": "^5.7.2"
+  }
+}

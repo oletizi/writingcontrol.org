@@ -1,0 +1,91 @@
+---
+import Logo from './Logo.astro';
+
+const path = Astro.url.pathname;
+function isActive(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(href + '/');
+}
+
+const nav = [
+  { href: '/projects', label: 'Projects' },
+  { href: '/essays', label: 'Essays' },
+  { href: '/about', label: 'About' },
+];
+---
+
+<header class="masthead">
+  <div class="masthead-inner site-container">
+    <Logo size="small" />
+    <nav class="masthead-nav" aria-label="Primary">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={['nav-link', { 'nav-link--active': isActive(item.href) }]}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+  <hr class="masthead-rule" aria-hidden="true" />
+</header>
+
+<style>
+  .masthead {
+    background: hsl(var(--paper));
+  }
+
+  .masthead-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+    flex-wrap: wrap;
+  }
+
+  .masthead-nav {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: hsl(var(--ink-soft));
+    text-decoration: none;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    color: hsl(var(--accent));
+  }
+
+  .nav-link--active {
+    color: hsl(var(--ink));
+    border-bottom-color: hsl(var(--accent));
+  }
+
+  .masthead-rule {
+    border: 0;
+    height: 1px;
+    background: hsl(var(--rule));
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    .masthead-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+</style>

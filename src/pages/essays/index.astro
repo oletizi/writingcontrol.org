@@ -1,0 +1,184 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const isProd = import.meta.env.PROD;
+
+const essays = (await getCollection('essays', (e) =>
+  isProd ? e.data.state === 'published' : true,
+)).sort((a, b) => b.data.datePublished.localeCompare(a.data.datePublished));
+
+interface Group {
+  year: string;
+  entries: typeof essays;
+}
+
+const grouped: Group[] = [];
+for (const entry of essays) {
+  const year = entry.data.datePublished.slice(0, 4);
+  let group = grouped.find((g) => g.year === year);
+  if (!group) {
+    group = { year, entries: [] };
+    grouped.push(group);
+  }
+  group.entries.push(entry);
+}
+---
+
+<BaseLayout title="Essays" description="Craft notes and literary nonfiction from writingcontrol.org.">
+  <section class="index site-container">
+    <header class="index-header">
+      <p class="folio">All</p>
+      <h1>Essays</h1>
+      <p class="index-dek">
+        Craft notes, literary nonfiction, the occasional polemic.
+      </p>
+      <hr class="rule-accent" aria-hidden="true" />
+    </header>
+
+    {grouped.length === 0 && (
+      <p class="empty">
+        Nothing published yet. The first essay is in the pipeline.
+      </p>
+    )}
+
+    {grouped.map((group) => (
+      <section class="year-group">
+        <h2 class="year-mark">{group.year}</h2>
+        <ul class="entries">
+          {group.entries.map((entry) => (
+            <li>
+              <a href={`/essays/${entry.id}`} class="entry-link">
+                <span class="entry-date folio">{entry.data.date}</span>
+                <span class="entry-title">{entry.data.title}</span>
+                {entry.data.description && (
+                  <span class="entry-dek">{entry.data.description}</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .index {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .index-header {
+    margin: 0 0 3rem;
+  }
+
+  .index-header h1 {
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0.4rem 0 0.75rem;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .index-dek {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    margin: 0 0 1.25rem;
+    max-width: 32rem;
+  }
+
+  .empty {
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+  }
+
+  .year-group {
+    margin: 3rem 0;
+  }
+
+  .year-mark {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--accent));
+    margin: 0 0 1rem;
+    border-bottom: 2px solid hsl(var(--accent));
+    padding-bottom: 0.4rem;
+    width: fit-content;
+  }
+
+  .entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .entries li {
+    border-bottom: 1px solid hsl(var(--rule));
+  }
+
+  .entry-link {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    grid-template-areas:
+      "date  title"
+      "date  dek";
+    gap: 0.25rem 1.5rem;
+    padding: 1.25rem 0;
+    color: hsl(var(--ink));
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .entry-link:hover {
+    background: hsl(var(--paper-2) / 0.5);
+  }
+
+  .entry-date {
+    grid-area: date;
+    align-self: baseline;
+    color: hsl(var(--ink-soft));
+  }
+
+  .entry-title {
+    grid-area: title;
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: hsl(var(--ink));
+    transition: color 0.15s ease;
+    font-variation-settings: "opsz" 36;
+  }
+
+  .entry-link:hover .entry-title {
+    color: hsl(var(--accent));
+  }
+
+  .entry-dek {
+    grid-area: dek;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .entry-link {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "date"
+        "title"
+        "dek";
+      gap: 0.35rem;
+    }
+  }
+</style>

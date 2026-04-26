@@ -1,0 +1,80 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { brand } from '@/brand';
+---
+
+<BaseLayout title="Colophon" description={`How ${brand.name} is built.`}>
+  <article class="colophon-page site-container">
+    <header class="colophon-header">
+      <p class="folio">Colophon</p>
+      <h1>How this is made</h1>
+      <hr class="rule-accent" aria-hidden="true" />
+    </header>
+
+    <div class="prose">
+      <h2>Type</h2>
+      <p>
+        Display set in <strong>Newsreader</strong> by Production Type — a
+        variable serif designed at the Font Bureau as an editorial reading
+        face, with a large optical-size axis that goes from intimate to
+        billboard. Body in <strong>Source Serif 4</strong>, Adobe's open-source
+        revival of the form, set at its text optical size for long-form
+        reading. Editorial meta — folios, status pills, dates — in
+        <strong>JetBrains Mono</strong>, kept consistent across all three
+        sister sites.
+      </p>
+
+      <h2>Stack</h2>
+      <p>
+        Built with <a href="https://astro.build">Astro 5</a>; static HTML
+        deployed on Netlify; written in Markdown with a small remark pipeline
+        for figures and heading dedup. No client JavaScript by default.
+      </p>
+
+      <h2>Editorial</h2>
+      <p>
+        Calendar and review workflow run through
+        <a href="https://github.com/audiocontrol-org/deskwork">deskwork</a>,
+        an open-source Claude Code plugin. The calendar lives in a markdown
+        table at <code>docs/editorial-calendar-writingcontrol.md</code>; the
+        review journal at <code>.deskwork/review-journal/</code>; both are part
+        of the repo's history.
+      </p>
+
+      <h2>Family</h2>
+      <p>
+        Sister to <a href="https://audiocontrol.org">audiocontrol.org</a>
+        (open source audio tools) and
+        <a href="https://editorialcontrol.org">editorialcontrol.org</a>
+        (building with AI agents). Each takes a deliberately different
+        aesthetic position; this one's the one that sits in daylight.
+      </p>
+
+      <h2>Source</h2>
+      <p>
+        The site code is open. The essays and project text are not.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .colophon-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .colophon-header {
+    max-width: var(--measure-reading);
+    margin: 0 auto 3rem;
+  }
+
+  .colophon-header h1 {
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0.5rem 0 1rem;
+    font-variation-settings: "opsz" 144;
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+interface Props {
+  size?: 'small' | 'large';
+  href?: string | null;
+}
+
+const { size = 'small', href = '/' } = Astro.props;
+const className = `logo logo--${size}`;
+---
+
+{href ? (
+  <a href={href} class={className} aria-label="writingcontrol.org — home">
+    <span class="logo-mark">w/c</span>
+    <span class="logo-word">writingcontrol</span>
+  </a>
+) : (
+  <span class={className}>
+    <span class="logo-mark">w/c</span>
+    <span class="logo-word">writingcontrol</span>
+  </span>
+)}
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-family: var(--font-display);
+    color: hsl(var(--ink));
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .logo:hover .logo-mark,
+  .logo:hover .logo-word {
+    color: hsl(var(--accent));
+  }
+
+  .logo-mark {
+    font-family: var(--font-mono);
+    font-size: 0.78em;
+    color: hsl(var(--accent));
+    letter-spacing: -0.04em;
+    border: 1px solid currentColor;
+    padding: 0.12em 0.32em;
+    text-transform: lowercase;
+    transition: color 0.15s ease;
+  }
+
+  .logo-word {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 36;
+    transition: color 0.15s ease;
+  }
+
+  .logo--small {
+    font-size: 1.1rem;
+  }
+
+  .logo--large {
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    font-weight: 500;
+  }
+
+  .logo--large .logo-mark {
+    font-size: 0.45em;
+    border-width: 2px;
+    padding: 0.2em 0.5em;
+  }
+
+  .logo--large .logo-word {
+    font-variation-settings: "opsz" 144;
+    letter-spacing: -0.025em;
+  }
+</style>

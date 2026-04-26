@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+
+const isProd = import.meta.env.PROD;
+
+const projects = (await getCollection('projects', (e) =>
+  isProd ? e.data.state === 'published' : true,
+)).sort((a, b) => {
+  const ao = a.data.order ?? 99;
+  const bo = b.data.order ?? 99;
+  if (ao !== bo) return ao - bo;
+  return b.data.datePublished.localeCompare(a.data.datePublished);
+});
+
+function romanize(n: number): string {
+  const map: [number, string][] = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  let v = n;
+  for (const [val, sym] of map) {
+    while (v >= val) {
+      out += sym;
+      v -= val;
+    }
+  }
+  return out;
+}
+---
+
+<BaseLayout title="Projects" description="Works in progress — fiction and literary nonfiction at writingcontrol.org.">
+  <section class="index site-container">
+    <header class="index-header">
+      <p class="folio">All</p>
+      <h1>Projects</h1>
+      <p class="index-dek">
+        Long pieces under construction. Status reflects where each one is in
+        the work, not where I'd like it to be.
+      </p>
+      <hr class="rule-accent" aria-hidden="true" />
+    </header>
+
+    {projects.length === 0 && (
+      <p class="empty">
+        No project pages yet. There's plenty cooking off the page.
+      </p>
+    )}
+
+    <div class="projects-list">
+      {projects.map((entry, i) => (
+        <ProjectCard
+          href={`/projects/${entry.id}`}
+          numeral={`§${romanize(i + 1)}`}
+          title={entry.data.title}
+          logline={entry.data.logline}
+          form={entry.data.form}
+          status={entry.data.status}
+          date={entry.data.date}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .index {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .index-header {
+    margin: 0 0 3rem;
+  }
+
+  .index-header h1 {
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0.4rem 0 0.75rem;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .index-dek {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    margin: 0 0 1.25rem;
+    max-width: 36rem;
+  }
+
+  .empty {
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+  }
+</style>

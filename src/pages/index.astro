@@ -1,0 +1,262 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Logo from '@/components/Logo.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { brand } from '@/brand';
+
+const isProd = import.meta.env.PROD;
+
+const projectEntries = (await getCollection('projects', (e) =>
+  isProd ? e.data.state === 'published' : true,
+)).sort((a, b) => {
+  const ao = a.data.order ?? 99;
+  const bo = b.data.order ?? 99;
+  if (ao !== bo) return ao - bo;
+  return b.data.datePublished.localeCompare(a.data.datePublished);
+});
+
+const essayEntries = (await getCollection('essays', (e) =>
+  isProd ? e.data.state === 'published' : true,
+))
+  .sort((a, b) => b.data.datePublished.localeCompare(a.data.datePublished))
+  .slice(0, 4);
+
+function romanize(n: number): string {
+  const map: [number, string][] = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  let v = n;
+  for (const [val, sym] of map) {
+    while (v >= val) {
+      out += sym;
+      v -= val;
+    }
+  }
+  return out;
+}
+---
+
+<BaseLayout>
+  <section class="lockup site-container">
+    <p class="folio folio--accent">A literary publication · Issue I</p>
+    <h1 class="lockup-title">
+      <span class="lockup-mark">w/c</span>
+      <span class="lockup-word">writingcontrol</span>
+    </h1>
+    <p class="lockup-tagline">{brand.tagline}</p>
+    <p class="lockup-statement">
+      A working notebook for fiction and literary nonfiction in progress —
+      and a deliberate dogfood of the
+      <a href="https://github.com/audiocontrol-org/deskwork">deskwork</a>
+      editorial plugin. What's posted here is what survived its own review.
+    </p>
+    <hr class="rule-accent" aria-hidden="true" />
+  </section>
+
+  {projectEntries.length > 0 && (
+    <section class="block site-container">
+      <header class="block-header">
+        <p class="folio">Works in progress</p>
+        <h2 class="block-title">Projects</h2>
+      </header>
+      <div class="projects-list">
+        {projectEntries.map((entry, i) => (
+          <ProjectCard
+            href={`/projects/${entry.id}`}
+            numeral={`§${romanize(i + 1)}`}
+            title={entry.data.title}
+            logline={entry.data.logline}
+            form={entry.data.form}
+            status={entry.data.status}
+            date={entry.data.date}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {essayEntries.length > 0 && (
+    <section class="block site-container">
+      <header class="block-header">
+        <p class="folio">Recent</p>
+        <h2 class="block-title">Essays</h2>
+      </header>
+      <ul class="essay-list">
+        {essayEntries.map((entry) => (
+          <li>
+            <a href={`/essays/${entry.id}`} class="essay-link">
+              <h3 class="essay-link-title">{entry.data.title}</h3>
+              <p class="essay-link-dek">{entry.data.description}</p>
+              <p class="folio">{entry.data.date}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="block-foot">
+        <a href="/essays" class="more-link">All essays →</a>
+      </p>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .lockup {
+    padding-top: 4rem;
+    padding-bottom: 3rem;
+  }
+
+  .lockup-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 11vw, 7.4rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+    margin: 0.6rem 0 1.5rem;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .lockup-mark {
+    font-family: var(--font-mono);
+    font-size: 0.32em;
+    color: hsl(var(--accent));
+    border: 2px solid hsl(var(--accent));
+    padding: 0.18em 0.4em;
+    letter-spacing: -0.04em;
+    text-transform: lowercase;
+    align-self: center;
+  }
+
+  .lockup-word {
+    color: hsl(var(--ink));
+  }
+
+  .lockup-tagline {
+    font-family: var(--font-body);
+    font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+    line-height: 1.35;
+    color: hsl(var(--ink));
+    font-style: italic;
+    margin: 0 0 1.5rem;
+    max-width: 36rem;
+  }
+
+  .lockup-statement {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: hsl(var(--ink-soft));
+    margin: 0 0 1rem;
+    max-width: 38rem;
+  }
+
+  .lockup-statement a {
+    color: hsl(var(--ink));
+    text-decoration-color: hsl(var(--accent));
+  }
+
+  .lockup-statement a:hover {
+    color: hsl(var(--accent));
+  }
+
+  .block {
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+  }
+
+  .block-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .block-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 72;
+  }
+
+  .projects-list {
+    /* Cards have their own top/bottom rules. */
+  }
+
+  .essay-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 0;
+  }
+
+  .essay-list li {
+    border-top: 1px solid hsl(var(--rule));
+  }
+
+  .essay-list li:last-child {
+    border-bottom: 1px solid hsl(var(--rule));
+  }
+
+  .essay-link {
+    display: block;
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    color: hsl(var(--ink));
+    text-decoration: none;
+    height: 100%;
+    transition: background 0.15s ease;
+  }
+
+  .essay-link:hover {
+    background: hsl(var(--paper-2) / 0.5);
+  }
+
+  .essay-link-title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    line-height: 1.15;
+    margin: 0 0 0.4rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: hsl(var(--ink));
+    transition: color 0.15s ease;
+    font-variation-settings: "opsz" 36;
+  }
+
+  .essay-link:hover .essay-link-title {
+    color: hsl(var(--accent));
+  }
+
+  .essay-link-dek {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.45;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    margin: 0 0 0.6rem;
+  }
+
+  .block-foot {
+    margin: 1.5rem 0 0;
+  }
+
+  .more-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: hsl(var(--accent));
+    text-decoration: none;
+    border-bottom: 1px solid hsl(var(--accent));
+    padding-bottom: 0.15rem;
+  }
+</style>

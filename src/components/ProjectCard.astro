@@ -1,0 +1,99 @@
+---
+interface Props {
+  href: string;
+  numeral?: string;
+  title: string;
+  logline: string;
+  form: string;
+  status: string;
+  date?: string;
+}
+
+const { href, numeral, title, logline, form, status, date } = Astro.props;
+
+const formLabel: Record<string, string> = {
+  novel: 'Novel',
+  novella: 'Novella',
+  'short-story': 'Short story',
+  'essay-collection': 'Essay collection',
+  'long-essay': 'Long essay',
+  memoir: 'Memoir',
+  other: 'Project',
+};
+---
+
+<a href={href} class="project-card">
+  <div class="project-card-row">
+    {numeral && <span class="section-numeral">{numeral}</span>}
+    <h3 class="project-card-title">{title}</h3>
+  </div>
+  <p class="project-card-logline">{logline}</p>
+  <div class="project-card-meta">
+    <span class="folio">{formLabel[form] ?? 'Project'}</span>
+    <span class={`status-pill status-pill--${status}`}>{status}</span>
+    {date && <span class="folio project-card-date">{date}</span>}
+  </div>
+</a>
+
+<style>
+  .project-card {
+    display: block;
+    padding: 1.5rem 0 1.75rem;
+    border-top: 1px solid hsl(var(--rule));
+    color: hsl(var(--ink));
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .project-card:hover {
+    background: hsl(var(--paper-2) / 0.5);
+  }
+
+  .project-card:last-child {
+    border-bottom: 1px solid hsl(var(--rule));
+  }
+
+  .project-card-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .project-card-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    margin: 0;
+    color: hsl(var(--ink));
+    transition: color 0.15s ease;
+    font-variation-settings: "opsz" 72;
+  }
+
+  .project-card:hover .project-card-title {
+    color: hsl(var(--accent));
+  }
+
+  .project-card-logline {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    margin: 0 0 0.85rem;
+    max-width: 38rem;
+  }
+
+  .project-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .project-card-date {
+    margin-left: auto;
+  }
+</style>

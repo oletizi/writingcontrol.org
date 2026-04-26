@@ -1,0 +1,95 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { brand } from '@/brand';
+---
+
+<BaseLayout title="About" description={`About ${brand.name}.`}>
+  <article class="about site-container">
+    <header class="about-header">
+      <p class="folio">About</p>
+      <h1>What this is</h1>
+      <hr class="rule-accent" aria-hidden="true" />
+    </header>
+
+    <div class="prose dropcap">
+      <p>
+        Writingcontrol is a working notebook. It exists to make a writing life
+        legible — to me, first; to anyone who wants to look in, second — and to
+        give my fiction and literary-nonfiction projects a public spine.
+      </p>
+
+      <p>
+        The site is a sister to two others that share the same stem.
+        <a href="https://audiocontrol.org">Audiocontrol</a> is where I write
+        about the open-source audio tools I build for old samplers and synths.
+        <a href="https://editorialcontrol.org">Editorialcontrol</a> is where I
+        write about working alongside coding agents on an editorial calendar.
+        Writingcontrol is where I bring those habits — version control,
+        editorial discipline, agent-assisted iteration — to bear on prose that
+        is not technical.
+      </p>
+
+      <h2>The dogfood</h2>
+
+      <p>
+        Almost everything you read here passes through
+        <a href="https://github.com/audiocontrol-org/deskwork">deskwork</a>,
+        an open-source Claude Code plugin I wrote to manage editorial calendars
+        from inside an agent. Ideas get captured, planned, outlined, drafted,
+        reviewed, and published as state on disk — not as inboxes or as Trello
+        cards I'd forget. If a piece is published here, it survived that
+        pipeline. If it isn't, it's still in there somewhere.
+      </p>
+
+      <p>
+        I use writingcontrol to find the bugs in deskwork that only show up
+        when you push real prose through it. Every craft essay you read is also
+        a bug report.
+      </p>
+
+      <h2>What's published</h2>
+
+      <p>
+        <strong>Projects</strong> are works in progress — a novel, an essay
+        collection, a long piece. Each gets a hub page with the logline, the
+        current status, and whatever excerpts or process notes have earned the
+        right to be public.
+      </p>
+
+      <p>
+        <strong>Essays</strong> are short pieces that don't belong to a project:
+        craft notes, occasional reportage, the kind of literary nonfiction that
+        wants to be read as itself.
+      </p>
+
+      <h2>Who I am</h2>
+
+      <p>
+        I'm Orion Letizi. I write software during the day and prose at the
+        edges. The voice you'll read here is mine; the agents I work with are
+        editorial company, not authors.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .about-header {
+    max-width: var(--measure-reading);
+    margin: 0 auto 3rem;
+  }
+
+  .about-header h1 {
+    font-size: clamp(2.6rem, 5vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0.5rem 0 1rem;
+    font-variation-settings: "opsz" 144;
+  }
+</style>

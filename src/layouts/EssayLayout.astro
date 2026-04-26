@@ -1,0 +1,200 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import '@/styles/prose.css';
+import { brand } from '@/brand';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  frontmatter?: {
+    title: string;
+    description?: string;
+    date?: string;
+    datePublished?: string;
+    dateModified?: string;
+    author?: string;
+    image?: ImageMetadata | string;
+    socialImage?: ImageMetadata | string;
+    tags?: string[];
+    originallyPublishedIn?: {
+      venue: string;
+      url: string;
+    };
+  };
+  headings?: Heading[];
+}
+
+function urlOf(value: ImageMetadata | string | undefined): string | undefined {
+  if (!value) return undefined;
+  return typeof value === 'string' ? value : value.src;
+}
+
+const { frontmatter, headings = [] } = Astro.props;
+const title = frontmatter?.title ?? 'Essay';
+const description = frontmatter?.description ?? brand.description;
+const date = frontmatter?.date;
+const datePublished = frontmatter?.datePublished;
+const dateModified = frontmatter?.dateModified ?? datePublished;
+const author = frontmatter?.author ?? brand.author;
+const tags = frontmatter?.tags ?? [];
+const originally = frontmatter?.originallyPublishedIn;
+
+const featureImage = frontmatter?.image;
+const socialImage = urlOf(frontmatter?.socialImage) ?? urlOf(frontmatter?.image);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished,
+  dateModified,
+  author: { '@type': 'Person', name: author },
+  publisher: {
+    '@type': 'Organization',
+    name: brand.name,
+    logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', Astro.site).toString() },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL.toString() },
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={socialImage}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article class="essay site-container">
+    <header class="essay-header">
+      <p class="folio">
+        <span>Essay</span>
+        {date && <><span aria-hidden="true">·</span><span>{date}</span></>}
+      </p>
+      <h1 class="essay-title">{title}</h1>
+      {description && <p class="essay-dek">{description}</p>}
+      <p class="folio essay-byline">
+        <span>By {author}</span>
+        {originally && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>
+              Originally in
+              <a href={originally.url} class="essay-byline-link" rel="noopener">{originally.venue}</a>
+            </span>
+          </>
+        )}
+      </p>
+      <hr class="rule-accent" aria-hidden="true" />
+    </header>
+
+    {featureImage && (
+      <figure class="essay-feature">
+        {typeof featureImage === 'string'
+          ? <img src={featureImage} alt="" />
+          : <Image src={featureImage} alt="" />
+        }
+      </figure>
+    )}
+
+    <div class="prose dropcap">
+      <slot />
+    </div>
+
+    {tags.length > 0 && (
+      <footer class="essay-foot">
+        <hr class="rule-hairline" aria-hidden="true" />
+        <p class="folio">
+          {tags.map((t, i) => (
+            <>
+              {i > 0 && <span aria-hidden="true">·</span>}
+              <span>{t}</span>
+            </>
+          ))}
+        </p>
+      </footer>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .essay {
+    padding-top: 3rem;
+    padding-bottom: 6rem;
+  }
+
+  .essay-header {
+    max-width: var(--measure-reading);
+    margin: 0 auto 3rem;
+    text-align: left;
+  }
+
+  .essay-title {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0.75rem 0 1rem;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .essay-dek {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    line-height: 1.45;
+    color: hsl(var(--ink-soft));
+    font-style: italic;
+    margin: 0 0 1.25rem;
+    max-width: 32rem;
+  }
+
+  .essay-byline {
+    margin: 0;
+    flex-wrap: wrap;
+  }
+
+  .essay-byline-link {
+    margin-left: 0.4rem;
+    color: hsl(var(--accent));
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--accent) / 0.4);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color 0.15s ease;
+  }
+
+  .essay-byline-link:hover {
+    text-decoration-color: hsl(var(--accent));
+  }
+
+  .essay-feature {
+    max-width: 52rem;
+    margin: 2rem auto 3rem;
+  }
+
+  .essay-feature img {
+    width: 100%;
+    border: 1px solid hsl(var(--rule));
+  }
+
+  .essay-foot {
+    max-width: var(--measure-reading);
+    margin: 3.5rem auto 0;
+  }
+
+  .folio {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectLayout from '@/layouts/ProjectLayout.astro';
+
+export async function getStaticPaths() {
+  const isProd = import.meta.env.PROD;
+  const projects = await getCollection('projects', (e) =>
+    isProd ? e.data.state === 'published' : true,
+  );
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const isProd = import.meta.env.PROD;
+
+// Convention: an essay belongs to a project's collection if its `tags`
+// include the project's slug. Sorted newest-first.
+const pieces = (
+  await getCollection('essays', (e) =>
+    (isProd ? e.data.state === 'published' : true) &&
+    (e.data.tags ?? []).includes(entry.id),
+  )
+).sort((a, b) => b.data.datePublished.localeCompare(a.data.datePublished));
+
+const { Content } = await render(entry);
+---
+
+<ProjectLayout frontmatter={entry.data} pieces={pieces}>
+  <Content />
+</ProjectLayout>
