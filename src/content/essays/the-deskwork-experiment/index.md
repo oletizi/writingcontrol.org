@@ -13,7 +13,7 @@ state: published
 
 # The Deskwork Experiment
 
-For the last year I've been running an editorial calendar inside an AI coding agent. Not a tracker pasted into a chat window — an actual versioned, file-on-disk system that the agent can read, write, and reason about. The pieces it manages are technical: posts about open-source audio software, essays about working with agents on editorial workflows. The system I wrote to manage them is called *deskwork*. It is small and opinionated and lives at the bottom of a working tree.
+For the past few months I've been running an editorial calendar inside an AI coding agent. Not a tracker pasted into a chat window — an actual versioned, file-on-disk system that the agent can read, write, and reason about. The pieces it manages are technical: posts about open-source audio software, essays about working with agents on editorial workflows. The system I wrote to manage them is called *deskwork*. It is small and opinionated and lives at the bottom of a working tree.
 
 Deskwork was built for an audience of one: me, writing about samplers and shell scripts. It works well for that. But the work it manages is the easy work — there is a thing that happened (a release, a discovery, a fix), and writing about it is a matter of finding the cleanest line. The piece exists before I sit down. I just have to find it.
 
