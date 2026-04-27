@@ -1,5 +1,5 @@
 ---
-title: "What's in a Name?"
+title: What's in a Name?
 description: Finding a constellation of Orions — and the truth.
 date: October 2020
 datePublished: "2020-10-01"
@@ -12,6 +12,7 @@ state: published
 originallyPublishedIn:
   venue: East Bay Magazine
   url: https://www.eastbaymag.com/whats-in-a-name-finding-a-constellation-of-orions-and-the-truth/
+id: 307d66e1-487f-4c57-b808-879e3fc18ec8
 ---
 
 # What's in a Name?

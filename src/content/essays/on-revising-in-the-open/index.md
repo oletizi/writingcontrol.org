@@ -8,6 +8,7 @@ tags:
   - craft
   - revision
 state: draft
+id: be1a883a-8df4-4404-97ee-77926102aa12
 ---
 
 # On Revising in the Open
