@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "sites": {
+    "writingcontrol": {
+      "host": "writingcontrol.org",
+      "contentDir": "src/content/essays",
+      "calendarPath": "docs/editorial-calendar-writingcontrol.md",
+      "blogFilenameTemplate": "{slug}/index.md",
+      "blogInitialState": "draft",
+      "blogOutlineSection": true
+    }
+  },
+  "defaultSite": "writingcontrol",
+  "author": "Orion Letizi"
+}
