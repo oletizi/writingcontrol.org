@@ -12,7 +12,8 @@ state: published
 originallyPublishedIn:
   venue: East Bay Magazine
   url: https://www.eastbaymag.com/whats-in-a-name-finding-a-constellation-of-orions-and-the-truth/
-id: 307d66e1-487f-4c57-b808-879e3fc18ec8
+deskwork:
+  id: 307d66e1-487f-4c57-b808-879e3fc18ec8
 ---
 
 # What's in a Name?

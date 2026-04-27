@@ -21,7 +21,7 @@ const essays = defineCollection({
   }),
   schema: ({ image }) =>
     z.object({
-      id: z.string().uuid().optional(),
+      deskwork: z.object({ id: z.string().uuid() }).passthrough().optional(),
       title: z.string(),
       description: z.string(),
       date: z.string(),
@@ -59,7 +59,7 @@ const projects = defineCollection({
   }),
   schema: ({ image }) =>
     z.object({
-      id: z.string().uuid().optional(),
+      deskwork: z.object({ id: z.string().uuid() }).passthrough().optional(),
       title: z.string(),
       logline: z.string(),
       form: z.enum(['novel', 'novella', 'short-story', 'essay-collection', 'long-essay', 'memoir', 'other']),
