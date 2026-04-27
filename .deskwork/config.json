@@ -3,7 +3,7 @@
   "sites": {
     "writingcontrol": {
       "host": "writingcontrol.org",
-      "contentDir": "src/content/essays",
+      "contentDir": "src/content",
       "calendarPath": "docs/editorial-calendar-writingcontrol.md",
       "blogFilenameTemplate": "{slug}/index.md",
       "blogInitialState": "draft",
