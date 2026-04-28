@@ -4,6 +4,58 @@ Session-by-session journal. Newest entries at the top.
 
 ---
 
+## 2026-04-28: Deskwork doctor — backfill, file-and-fix #37, migrate to v0.7.2 namespace
+
+### Feature: (none — direct-to-main, continuing dogfood loop)
+### Worktree: writingcontrol.org (main)
+
+**Goal:** Run `deskwork:doctor` on a clean tree, see what the new `id:` binding rule wants, fix it. Stay close to the maintainer if anything breaks.
+
+**Accomplished:**
+- Doctor audit found 5 `missing-frontmatter-id` findings (expected — pre-Phase-19 calendar carries UUIDs that the files didn't yet reference). All 5 calendar entries (3 essays + 2 projects).
+- Patched the Astro content schema to accept the binding field — first as `id: z.string().uuid().optional()` (v0.7.1 doctor's option 1) on both `essays` and `projects` collections.
+- Ran `deskwork doctor --fix=missing-frontmatter-id --yes` — all 5 entries bound to their files via the slug-template path; no ambiguity prompts.
+- **Caught immediate build breakage** before commit: `npm run check` reported `datePublished: Expected type "string", received "date"` because doctor's YAML rewrite stripped the quotes from every ISO `datePublished:`. Hit the exact YAML-date footgun the prior session journal called out as a Conventions item.
+- Re-quoted `datePublished:` on all 5 files manually, verified `npm run check` and `npm run build` clean, doctor clean.
+- Filed [audiocontrol-org/deskwork#37](https://github.com/audiocontrol-org/deskwork/issues/37) — *doctor: frontmatter rewrite strips quotes from string scalars* — with concrete repro, two-symptom decomposition, and a 3-option fix range (round-trip-preserving YAML / force-quote ISO pattern / append-only mode).
+- Committed `95f98f1`: backfill ids + schema patch (workaround for #37). Pushed to main.
+- Maintainer shipped **v0.7.2** during the same session with a re-architecture: pulled the binding under a `deskwork:` namespace block (so deskwork doesn't squat the operator's top-level `id:` keyspace), AND made the rewrite round-trip-preserving (the actual #37 ask).
+- Re-patched the schema: replaced `id: z.string().uuid().optional()` with `deskwork: z.object({ id: z.string().uuid() }).passthrough().optional()` on both collections. The `passthrough()` leaves headroom for additional deskwork metadata fields without per-field schema work.
+- Ran `deskwork doctor --fix=legacy-top-level-id-migration --yes` — all 5 files migrated cleanly from top-level `id:` to `deskwork.id`. **Round-trip preservation worked**: every `datePublished: "..."` quote I'd added by hand under v0.7.1 survived the v0.7.2 migration intact.
+- Closed #37 with an acceptance comment that included the migration repair output, the quote-preservation spot-check, and one paragraph of bonus design observation on why namespacing the binding was the right call (keyspace + future plugin-metadata headroom).
+- Committed `bb84241`: migrate to namespaced binding (v0.7.2). Pushed to main.
+
+**Didn't Work:**
+- `mktemp /tmp/foo-XXXXXX.md` produced a file literally named `foo-XXXXXX.md` (no substitution) — twice. macOS BSD mktemp only replaces the X's when they're at the very end of the basename; any suffix breaks it. Switched to `mktemp /tmp/foo-XXXXXX` (no extension); both subsequent uses worked.
+- One `gh issue view 37 --json` call hit a transient TLS handshake timeout from GitHub's GraphQL API. Retried in the next batch and it returned. Not a workflow problem, just network noise; mentioning so future-me knows it can happen.
+
+**Course Corrections:**
+- [PROCESS] Ran `--fix=missing-frontmatter-id --yes` on all 5 files at once before sanity-checking what doctor's frontmatter rewrite would actually do to the rest of the YAML. The damage was reversible (one Edit per file to re-quote `datePublished:`) and the bug surfaced before commit, but a `dry-run → fix one → verify → fix rest` rhythm would have caught the quote-stripping behavior on the first file instead of all five. Going forward: when running ANY doctor `--fix` for the first time on a host, fix one file, diff it, then unblock the rest. The `--fix=<rule> --yes --json` dry-run helper is for exactly this.
+- [PROCESS] Started `mktemp /tmp/foo-XXXXXX.md` twice this session before remembering BSD mktemp's suffix-doesn't-substitute behavior. The right pattern on macOS is `mktemp /tmp/foo-XXXXXX` and let the file be extension-less; tools like `gh --body-file` and `git commit -F` don't care about the suffix.
+
+**Quantitative:**
+- Messages: ~12 (very short — most of the work was a tight maintainer feedback loop)
+- Commits to writingcontrol.org: 2 code commits (`95f98f1`, `bb84241`) + this docs commit
+- Issues filed against deskwork: 1 (#37), closed in the same session with acceptance
+- deskwork plugin versions traversed: 2 (0.7.1 → 0.7.2)
+- Course corrections: 2 ([PROCESS] × 2)
+- Files changed across both code commits: 6 (1 schema, 5 frontmatter migrations)
+
+**Insights:**
+- Filing a bug as **symptom + fix range** (3 options, ordered by effort) rather than **"do option 1"** gave the maintainer room to pick option 0 — re-architect the binding model, not just patch the rewrite. The "preserve original quoting" fix shipped as part of a larger namespace-move that the maintainer probably had been wanting to do anyway. The bug was a forcing function, not a prescription. Continue using this shape for design-adjacent bug reports.
+- The deskwork dogfood loop's response time is now measured in *single-session*: file → fix → reload → migrate → close. That's the right scale for a plugin under active dev — when the maintainer is also the dogfooder's audience, the right cadence is small bugs + tight loops, not periodic batch reports.
+- A schema patch that lives in the host's `content.config.ts` will churn at the same cadence as the plugin's binding model. Two iterations in one session (`id: z.string()` → `deskwork: z.object().passthrough()`) is the cost of being early. Worth using `passthrough()` aggressively on plugin namespaces so future fields don't need per-field schema work — that's what the maintainer chose, and it's the right call.
+- Round-trip-preserving YAML rewrites are non-trivial — most YAML libraries normalize on emit. The fact that v0.7.2 ships this end-to-end (every byte of the unmodified frontmatter preserved through a binding migration) is a quiet but important reliability property. Hosts can now trust doctor's `--fix` calls in a way they couldn't on v0.7.1, which removes the need for the "always commit before running doctor" defensive habit.
+- The macOS BSD mktemp-with-suffix gotcha is generally-applicable: any future tooling-script that creates ephemeral files for `gh --body-file` or `git commit -F` should drop the suffix. Tempfiles don't need extensions; tools that take filenames don't infer types from them.
+
+**Calendar/binding state at session end:**
+- 5/5 calendar entries bound via `deskwork.id` namespaced frontmatter
+- Doctor: clean across 1 site
+- Schema accepts `deskwork: z.object({...}).passthrough().optional()` on both collections
+- All 5 entry files have quoted `datePublished:` (preserved through v0.7.2 migration)
+
+---
+
 ## 2026-04-26 (session 2): Licenses, prose typography, deskwork dogfood end-to-end
 
 ### Feature: (none — direct-to-main, continuing)
