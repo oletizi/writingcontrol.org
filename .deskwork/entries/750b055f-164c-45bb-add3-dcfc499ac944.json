@@ -1,0 +1,13 @@
+{
+  "uuid": "750b055f-164c-45bb-add3-dcfc499ac944",
+  "slug": "the-outbound",
+  "title": "The Outbound",
+  "keywords": [],
+  "source": "manual",
+  "currentStage": "Published",
+  "iterationByStage": {},
+  "createdAt": "2026-04-27T05:12:31.894Z",
+  "updatedAt": "2026-04-27T05:12:31.894Z",
+  "datePublished": "2026-04-26T00:00:00.000Z",
+  "artifactPath": "src/content/projects/the-outbound/index.md"
+}

@@ -1,0 +1,13 @@
+{
+  "uuid": "5715225c-5d22-417d-934a-1fb13bdc2ac2",
+  "slug": "field-notes",
+  "title": "Field Notes",
+  "keywords": [],
+  "source": "manual",
+  "currentStage": "Published",
+  "iterationByStage": {},
+  "createdAt": "2026-04-27T05:12:31.893Z",
+  "updatedAt": "2026-04-27T05:12:31.893Z",
+  "datePublished": "2026-04-10T00:00:00.000Z",
+  "artifactPath": "src/content/projects/field-notes/index.md"
+}

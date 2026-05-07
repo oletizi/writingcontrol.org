@@ -1,0 +1,14 @@
+{
+  "uuid": "77d9a7ad-89c6-45a2-8b9b-ff4598963296",
+  "slug": "the-deskwork-experiment",
+  "title": "The Deskwork Experiment",
+  "keywords": [],
+  "source": "manual",
+  "currentStage": "Published",
+  "iterationByStage": {},
+  "createdAt": "2026-04-27T03:23:17.510Z",
+  "updatedAt": "2026-04-27T03:23:17.510Z",
+  "description": "Why I'm running my fiction calendar through a Claude Code plugin I wrote for technical blogging.",
+  "datePublished": "2026-04-20T00:00:00.000Z",
+  "artifactPath": "src/content/essays/the-deskwork-experiment/index.md"
+}
